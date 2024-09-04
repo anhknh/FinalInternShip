@@ -90,25 +90,25 @@ public class CourseService {
 
 
     @Transactional
-    public CourseDTO addCourse(CourseDTO courseDTO, MultipartFile file) throws IOException {
+    public CourseDTO addCourse(CourseDTO courseDTO, MultipartFile file){
         if (courseRepo.existsByCourseCode(courseDTO.getCourseCode())){
             throw new DuplicateCourseCodeException("CourseCode", courseDTO.getCourseCode());
         }
         Course course = courseMapper.toEntity(courseDTO);
-        course.setImage(fileUploadService.saveFile(file));
+        course.setImage(fileUploadService.saveFile(file, null));
         course.setStatus(1);
         return courseMapper.toDto(courseRepo.save(course));
     }
 
     @Transactional
-    public CourseDTO updateCourse(CourseDTO courseDTO, MultipartFile file) throws IOException {
+    public CourseDTO updateCourse(CourseDTO courseDTO, MultipartFile file){
         if (!(courseDTO.getId() != null && courseRepo.existsById(courseDTO.getId()))) {
             throw new ResourceNotFoundException("Course", courseDTO.getId());
         }
         Course course = courseRepo.findById(courseDTO.getId()).orElse(null);
         if (course != null) {
             fileUploadService.deleteFile(course.getImage());
-            course.setImage(fileUploadService.saveFile(file));
+            course.setImage(fileUploadService.saveFile(file, null));
             course.setTitle(courseDTO.getTitle());
             course.setDescription(courseDTO.getDescription());
             course.setStatus(courseDTO.getStatus());

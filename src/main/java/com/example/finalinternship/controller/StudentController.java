@@ -1,6 +1,7 @@
 package com.example.finalinternship.controller;
 
 import com.example.finalinternship.dto.StudentDTO;
+import com.example.finalinternship.dto.StudentSearchDTO;
 import com.example.finalinternship.exception.CreateGroup;
 import com.example.finalinternship.exception.UpdateGroup;
 import com.example.finalinternship.service.StudentService;
@@ -34,13 +35,13 @@ public class StudentController {
 
     @GetMapping("/search-student")
     public ResponseEntity<List<StudentDTO>> searchStudent(@RequestParam(value = "studentCode", required = false) String studentCode,
-                                                        @RequestParam(value = "name", required = false) String name,
-                                                        @RequestParam(value = "email", required = false) String email,
-                                                        @RequestParam(value = "startDate", required = false) String startDate,
-                                                        @RequestParam(value = "endDate", required = false) String endDate,
-                                                        @RequestParam(value = "courseCode", required = false) String courseCode,
-                                                        @RequestParam(value = "size", required = false) Optional<Integer> size,
-                                                        @RequestParam(value = "page", required = false) Optional<Integer> page) {
+                                                                @RequestParam(value = "name", required = false) String name,
+                                                                @RequestParam(value = "email", required = false) String email,
+                                                                @RequestParam(value = "startDate", required = false) String startDate,
+                                                                @RequestParam(value = "endDate", required = false) String endDate,
+                                                                @RequestParam(value = "courseCode", required = false) String courseCode,
+                                                                @RequestParam(value = "size", required = false) Optional<Integer> size,
+                                                                @RequestParam(value = "page", required = false) Optional<Integer> page) {
         Pageable pageable = PageRequest.of(page.orElse(0), size.orElse(5));
         return ResponseEntity.ok(studentService.searchStudent(studentCode,name,email,startDate,endDate,courseCode,pageable));
     }

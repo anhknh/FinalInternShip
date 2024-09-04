@@ -48,14 +48,14 @@ public class CourseController {
     @PostMapping("/add-course")
     public ResponseEntity<CourseDTO> addCourse(@Validated(CreateGroup.class)
                                                @ModelAttribute CourseDTO courseDTO,
-                                               @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
+                                               @RequestParam(value = "file", required = false) MultipartFile file)  {
         return ResponseEntity.ok(courseService.addCourse(courseDTO, file));
     }
 
     @PutMapping("/update-course")
     public ResponseEntity<CourseDTO> updateCourse(@Validated(UpdateGroup.class)
                                                   @ModelAttribute CourseDTO courseDTO,
-                                                  @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
+                                                  @RequestParam(value = "file", required = false) MultipartFile file)  {
         return ResponseEntity.ok(courseService.updateCourse(courseDTO, file));
     }
 

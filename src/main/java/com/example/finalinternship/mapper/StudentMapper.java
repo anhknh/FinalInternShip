@@ -1,7 +1,6 @@
 package com.example.finalinternship.mapper;
 
-import com.example.finalinternship.dto.CourseDTO;
-import com.example.finalinternship.dto.StudentCourseDTO;
+
 import com.example.finalinternship.dto.StudentDTO;
 import com.example.finalinternship.entity.Student;
 import org.mapstruct.*;
@@ -19,12 +18,6 @@ public interface StudentMapper {
 
     List<StudentDTO> toListStudentDTO(List<Student> students);
     List<Student> toListStudent(List<StudentDTO> studentDTOs);
-
-    @AfterMapping
-    default void afterMapDTO(@MappingTarget StudentDTO studentDTO, Student course ) {
-        List<CourseDTO> list = studentDTO.getStudentCourseDTOS().stream().map(StudentCourseDTO::getCourse).toList();
-        studentDTO.setCourseDTOS(list);
-    }
 }
 
 

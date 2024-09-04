@@ -1,6 +1,7 @@
 package com.example.finalinternship.service;
 
 import com.example.finalinternship.dto.StudentDTO;
+import com.example.finalinternship.dto.StudentSearchDTO;
 import com.example.finalinternship.entity.Course;
 import com.example.finalinternship.entity.Student;
 import com.example.finalinternship.entity.StudentCourse;
@@ -8,6 +9,7 @@ import com.example.finalinternship.entity.StudentCourseId;
 import com.example.finalinternship.exception.DuplicateCourseCodeException;
 import com.example.finalinternship.exception.ResourceNotFoundException;
 import com.example.finalinternship.mapper.StudentMapper;
+import com.example.finalinternship.mapper.StudentSearchMapper;
 import com.example.finalinternship.repository.CourseRepo;
 import com.example.finalinternship.repository.StudentCourseRepo;
 import com.example.finalinternship.repository.StudentRepo;
@@ -40,6 +42,8 @@ public class StudentService {
     StudentCourseRepo studentCourseRepo;
     @Autowired
     StudentMapper studentMapper;
+    @Autowired
+    StudentSearchMapper studentSearchMapper;
     @PersistenceContext
     EntityManager em;
 
@@ -61,7 +65,7 @@ public class StudentService {
     }
 
     public List<StudentDTO> searchStudent(String studentCode, String name,
-                                          String email, String startDate, String endDate, String courseCode, Pageable pageable) {
+                                                String email, String startDate, String endDate, String courseCode, Pageable pageable) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Student> cq = cb.createQuery(Student.class);
@@ -103,7 +107,7 @@ public class StudentService {
 
 
     @Transactional
-    public StudentDTO addStudent(StudentDTO studentDTO, MultipartFile file, Integer[] listCourseIds) throws IOException {
+    public StudentDTO addStudent(StudentDTO studentDTO, MultipartFile file, Integer[] listCourseIds){
         if (studentRepo.existsByStudentCode(studentDTO.getStudentCode())){
             throw new DuplicateCourseCodeException("StudentCode", studentDTO.getStudentCode());
         }
@@ -118,7 +122,7 @@ public class StudentService {
         student.setEmail(studentDTO.getEmail());
         student.setStudentCode(studentDTO.getStudentCode());
         student.setStatus(1);
-        student.setImage(fileUploadService.saveFile(file));
+        student.setImage(fileUploadService.saveFile(file, null));
         Student savedStudent = studentRepo.save(student);
         for (Course course : selectedCourses) {
             StudentCourse studentCourse = new StudentCourse();
@@ -131,7 +135,7 @@ public class StudentService {
     }
 
     @Transactional
-    public StudentDTO updateStudent(StudentDTO studentDTO, MultipartFile file, Integer[] listCourseIds) throws IOException {
+    public StudentDTO updateStudent(StudentDTO studentDTO, MultipartFile file, Integer[] listCourseIds){
         if (!(studentDTO.getId() != null && studentRepo.existsById(studentDTO.getId()))) {
             throw new ResourceNotFoundException("Student", studentDTO.getId());
         }
@@ -142,7 +146,7 @@ public class StudentService {
             student.setEmail(studentDTO.getEmail());
             student.setStatus(studentDTO.getStatus());
             fileUploadService.deleteFile(studentDTO.getImage());
-            student.setImage(fileUploadService.saveFile(file));
+            student.setImage(fileUploadService.saveFile(file, student.getImage()));
         }
 
         List<Course> allCourses = courseRepo.findAll();
