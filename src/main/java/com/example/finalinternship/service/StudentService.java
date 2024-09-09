@@ -1,7 +1,6 @@
 package com.example.finalinternship.service;
 
 import com.example.finalinternship.dto.StudentDTO;
-import com.example.finalinternship.dto.StudentSearchDTO;
 import com.example.finalinternship.entity.Course;
 import com.example.finalinternship.entity.Student;
 import com.example.finalinternship.entity.StudentCourse;

@@ -36,7 +36,7 @@ public class FileUploadService {
             }
             return path.toString();
         }
-        return oldFilePath; // Return the old file path if the new file is null or empty
+        return oldFilePath;
     }
 
     public boolean deleteFile(String urlFile) {
